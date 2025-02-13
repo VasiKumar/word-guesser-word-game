@@ -1,0 +1,69 @@
+import random
+
+#function for stopping the loop when the 5 chances are used up
+def check(i):
+    if (i==5):
+        print("Dead all chances used !")
+        exit()
+    else:
+        return
+    
+words =["delhi","mumbai","jharkhand","indore","odisha"]   #Here add more
+
+original=random.choice(words)
+choosen=original
+length=len(choosen)
+n,m= random.sample(range(length),2)
+
+#stores the 2 characters of the missing values 
+n1=choosen[n]
+m1= choosen[m]
+
+#logic for removing the charcter from the word
+
+up1=choosen[:n]+"_"+choosen[n+1:]
+up2= up1[:m] + "_" + up1[m+1:]
+
+up3= choosen[:m] + "_" + choosen[m+1:]
+print(up2)
+
+print("Let the game begin ")
+print("Warning there are only 5 chances ")
+
+user_first=input("Enter the first guess: ")
+
+i=0
+#initially assume the loop as true for chances for the user
+while True:
+    if (user_first== n1 ):
+        print(up3)
+        user_second=input("Enter the second guess: ")
+        if(user_second==m1):
+            print(choosen)
+            print("Congratulations you won !")
+        else:
+            i+=1
+            check(i)
+            print("Try again")
+            
+
+
+
+    elif(user_first==m1):
+        print(up1)
+        user_second=input("Enter the second guess: ")
+        if(user_second==n1):
+            print(choosen)
+            print("Congratulations you won !")
+        else: 
+            i+=1
+            check(i)
+            print("Try again !")
+
+    else:
+        i+=1
+        check(i)
+        print("Try again !")
+
+
+
