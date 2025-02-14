@@ -1,70 +1,72 @@
 import random
 
-# Function for stopping the loop when the 5 chances are used up
+# Function to stop the loop when 5 chances are used up
 def check(i):
     if i == 5:
         print("Dead! All chances used!")
         exit()
+    else:
+        return
 
-# List of words
-words = ["delhi", "mumbai", "jharkhand", "indore", "odisha"]
+words = ["delhi", "mumbai", "jharkhand", "indore", "odisha"]  # Add more words if needed
 
-# Choose a random word
 original = random.choice(words)
 length = len(original)
 
-# Ensure distinct indices
-while True:
-    n, m = random.sample(range(length), 2)
-    if n != m:
-        break
+# Select two distinct random positions
+n, m = random.sample(range(length), 2)
 
-# Stores the 2 characters of the missing values
-n1, m1 = original[n], original[m]
+# Store the missing characters
+n1 = original[n]
+m1 = original[m]
 
-# Replace the characters with underscores
-hidden_word = list(original)
-hidden_word[n], hidden_word[m] = '_', '_'
-hidden_display = ''.join(hidden_word)
+# Remove characters from the word
+masked_word = list(original)
+masked_word[n] = "_"
+masked_word[m] = "_"
+masked_word = "".join(masked_word)
 
-print(hidden_display)
-
+print(masked_word)
 print("Let the game begin!")
-print("Warning: You have only 5 chances.")
+print("Warning: You have only 5 chances!")
 
 i = 0
+
 # Game loop
 while i < 5:
-    # First guess
+    # Guess the first character
     user_first = input("Enter the first guess: ").lower()
 
     if user_first == n1 or user_first == m1:
-        revealed_word = list(hidden_word)
-        # Reveal the guessed character
+        print("Correct guess!")
+        
+        # Update the word accordingly
         if user_first == n1:
+            revealed_word = list(masked_word)
             revealed_word[n] = n1
-        if user_first == m1:
+            masked_word = "".join(revealed_word)
+        else:
+            revealed_word = list(masked_word)
             revealed_word[m] = m1
+            masked_word = "".join(revealed_word)
 
-        print(''.join(revealed_word))
+        print(masked_word)
 
-        # Second guess
+        # Guess the second character
         user_second = input("Enter the second guess: ").lower()
-        if user_second == n1 or user_second == m1:
-            # If both guesses are correct, you win
-            if revealed_word[n] == n1 and revealed_word[m] == m1:
-                print(original)
-                print("Congratulations! You won!")
-                break
-            else:
-                i += 1
-                check(i)
-                print("Wrong second guess. Try again!")
+
+        if user_second == (m1 if user_first == n1 else n1):
+            print(f"Congratulations! You won! The word is '{original}'")
+            break
         else:
             i += 1
             check(i)
-            print("Wrong guess. Try again!")
+            print(f"Wrong guess! {5 - i} chances left. Try again!")
     else:
         i += 1
         check(i)
-        print("Wrong guess. Try again!")
+        print(f"Wrong guess! {5 - i} chances left. Try again!")
+
+# If loop ends without a win
+if i == 5:
+    print(f"Game over! The correct word was '{original}'.")
